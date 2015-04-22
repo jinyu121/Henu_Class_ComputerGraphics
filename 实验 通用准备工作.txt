@@ -1,0 +1,15 @@
+	////////// 通用准备工作 //////////
+	//定义矩形
+	CRect rect;         
+	//获得客户区矩形的大小
+	GetClientRect(&rect);                      
+	//自定义坐标系
+	pDC->SetMapMode(MM_ANISOTROPIC);                    
+	//设置窗口比例
+	pDC->SetWindowExt(rect.Width(),rect.Height());      
+	//设置视区比例，且x轴水平向右，y轴垂直向上
+	pDC->SetViewportExt(rect.Width(),-rect.Height());   
+	//设置客户区中心为坐标系原点
+	pDC->SetViewportOrg(rect.Width()/2,rect.Height()/2);
+	//矩形与客户区重合
+	rect.OffsetRect(-rect.Width()/2,-rect.Height()/2);  
