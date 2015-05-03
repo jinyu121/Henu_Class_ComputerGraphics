@@ -7,6 +7,7 @@
 #include "HaoYuDoc.h"
 #include "HaoYuView.h"
 #include <queue>
+#include <time.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,8 +22,8 @@ IMPLEMENT_DYNCREATE(CHaoYuView, CView)
 
 BEGIN_MESSAGE_MAP(CHaoYuView, CView)
 	//{{AFX_MSG_MAP(CHaoYuView)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
+	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
@@ -36,7 +37,8 @@ END_MESSAGE_MAP()
 CHaoYuView::CHaoYuView()
 {
 	// TODO: add construction code here
-
+	this->n=0;
+	srand((unsigned)time(NULL));
 }
 
 CHaoYuView::~CHaoYuView()
@@ -58,31 +60,7 @@ void CHaoYuView::OnDraw(CDC* pDC)
 {
 	CHaoYuDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	// TODO: add draw code for native data here
-	
-	int p1_n=7;
-	CPoint p1[]={
-			CPoint(70,80),
-			CPoint(30,120),
-			CPoint(10,70),
-			CPoint(30,10),
-			CPoint(60,50),
-			CPoint(80,10),
-			CPoint(120,90)
-	};
-	
-	HYFill(pDC,p1_n,p1,RGB(0,155,0));
-	
-	int p2_n=4;
-	CPoint p2[]={
-			CPoint(100,100),
-			CPoint(100,200),
-			CPoint(200,200),
-			CPoint(200,100),
-	};
-
-	HYFill(pDC,p2_n,p2,RGB(0,0,255));
-	
+	pDC->TextOut(50,50,"×ó¼ü´òµãÓÒ¼ü»­Í¼");
 }
 class HYEdge{
 public:
@@ -91,17 +69,18 @@ public:
 	//int next;
 	HYEdge(){}
 	HYEdge(CPoint c1,CPoint c2){
-		ymin=min(c1.y,c2.y);
-		ymax=max(c1.y,c2.y);
+		if (c2.y<c1.y){
+			CPoint t=c1;
+			c1=c2;
+			c2=t;
+		}
+		ymax=c2.y;
+		ymin=c1.y;
+		x=c1.x;
 		double dx=c2.x-c1.x;
 		double dy=c2.y-c1.y;
-		if (ymin==c1.y){
-			x=c1.x;		
-		}else{
-			x=c2.x;
-		}
 		if (dx!=0){
-			k=((double)dy/(double)dx);
+			k=((double)dx/(double)dy);
 		}else{
 			k=0;
 		}
@@ -111,23 +90,22 @@ public:
 
 
 void CHaoYuView::HYFill(CDC* pDC, int n, CPoint* p,COLORREF color){
-	int i,j,k,sta;
-	double x=0;
-	for(i=0;i<n;i++){
-		j=(i+1)%n;
-		HYEdge e=HYEdge(p[i],p[j]);
-		x=e.x;
-		// For each line
-		for (j=e.ymin;j<e.ymax;j++){
-			// For each point
-			for (k=(int)(e.x+0.5);k<=1024;k++){
-				if (pDC->GetPixel(k,j)==RGB(255,255,255) ){
-					pDC->SetPixelV(k,j,color);
+	int maxmax= -100;
+	double x;
+	for(int i=0;i<n;i++){
+		maxmax=max(maxmax,p[i].x);
+	}
+	for(int iter=0;iter<n;iter++){
+		HYEdge e=HYEdge(p[iter],p[(iter+1)%n]);
+
+		for (int y=e.ymin;y<e.ymax;y++){
+			for(double x=e.x+e.k*(y-e.ymin);x<maxmax;x++){
+				if (pDC->GetPixel((int)x,y)==color){
+					pDC->SetPixelV((int)x,y,RGB(255,255,255));
 				}else{
-					pDC->SetPixelV(k,j,RGB(255,255,255));
+					pDC->SetPixelV((int)x,y,color);
 				}
 			}
-			e.x=e.x+e.k;
 		}
 	}
 }
@@ -174,3 +152,23 @@ CHaoYuDoc* CHaoYuView::GetDocument() // non-debug version is inline
 
 /////////////////////////////////////////////////////////////////////////////
 // CHaoYuView message handlers
+
+void CHaoYuView::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CView::OnLButtonDown(nFlags, point);
+	this->po[this->n]=point;
+	this->n++;
+}
+
+void CHaoYuView::OnRButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CView::OnRButtonDown(nFlags, point);
+	CDC* pDC;
+	pDC=GetDC();
+	HYFill(pDC,n,this->po,RGB(rand()%256,rand()%256,rand()%256));
+	n=0;
+}
