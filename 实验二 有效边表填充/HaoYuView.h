@@ -19,6 +19,8 @@ protected: // create from serialization only
 // Attributes
 public:
 	CHaoYuDoc* GetDocument();
+	CPoint pps[10000];
+	int counter;
 
 // Operations
 public:
@@ -49,8 +51,8 @@ protected:
 protected:
 	void CHaoYuView::HYFill(CDC* pDC, int n, CPoint* p,COLORREF color);
 	//{{AFX_MSG(CHaoYuView)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

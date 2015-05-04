@@ -21,8 +21,8 @@ IMPLEMENT_DYNCREATE(CHaoYuView, CView)
 
 BEGIN_MESSAGE_MAP(CHaoYuView, CView)
 	//{{AFX_MSG_MAP(CHaoYuView)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
+	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
 	//}}AFX_MSG_MAP
 	// Standard printing commands
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 CHaoYuView::CHaoYuView()
 {
 	// TODO: add construction code here
-
+	this->counter=0;
 }
 
 CHaoYuView::~CHaoYuView()
@@ -58,30 +58,9 @@ void CHaoYuView::OnDraw(CDC* pDC)
 {
 	CHaoYuDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	// TODO: add draw code for native data here
-	int p1_n=7;
-	CPoint p1[]={
-			CPoint(70,80),
-			CPoint(30,120),
-			CPoint(10,70),
-			CPoint(30,10),
-			CPoint(60,50),
-			CPoint(80,10),
-			CPoint(120,90)
-	};
-	
-	HYFill(pDC,p1_n,p1,RGB(0,155,0));
-/*
-	int p2_n=4;
-	CPoint p2[]={
-			CPoint(100,100),
-			CPoint(100,200),
-			CPoint(200,200),
-			CPoint(200,100),
-	};
-
-	HYFill(pDC,p2_n,p2,RGB(0,155,0));
-	*/
+	pDC->TextOut(100,100,"左键选点，右键确认画图");
+	pDC->TextOut(100,120,"尽量去左上角，高度不要超过1024");
+	pDC->TextOut(100,140,"改变窗口大小以清除屏幕");
 }
 class HYEdge{
 public:
@@ -205,3 +184,22 @@ CHaoYuDoc* CHaoYuView::GetDocument() // non-debug version is inline
 
 /////////////////////////////////////////////////////////////////////////////
 // CHaoYuView message handlers
+
+void CHaoYuView::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CView::OnLButtonDown(nFlags, point);
+	this->counter+=1;
+	this->pps[this->counter-1]=point;
+}
+
+void CHaoYuView::OnRButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CView::OnRButtonDown(nFlags, point);
+	CDC* pDC=GetDC();
+	HYFill(pDC,this->counter,this->pps,RGB(0,155,0));
+	this->counter=0;
+}
