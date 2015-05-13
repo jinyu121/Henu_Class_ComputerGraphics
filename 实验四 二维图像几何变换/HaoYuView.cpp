@@ -145,92 +145,89 @@ void CHaoYuView::ready ( CDC* pDC ) {
     pDC->LineTo ( -200, 0 );
 }
 
+void CHaoYuView::Change(double* inMat,int mx,int my){
+	int i,j,k,l;
+	double mat[3][3];
+	for(i=0;i<mx;i++){
+		for(j=0;j<my;j++){
+			mat[i][j]=inMat[i*my+j];
+		}
+	}
+    for ( l = 0; l < UPLIMIT; l++ ) {
+		double bef[1][3]={{this->p[l].x,this->p[l].y,1}};
+		double aft[1][3]={{0,0,0}};
+		for(int i=0;i<1;i++){
+			for(int j=0;j<3;j++){
+				for(int k=0;k<3;k++){
+					aft[i][j]+=(bef[i][k]*mat[k][j]);
+				}
+			}
+		}
+		this->p[l].x=int(aft[0][0]);
+		this->p[l].y=int(aft[0][1]);
+    }
+}
 
 void CHaoYuView::OnHyUp() {
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].y += STEP;
-    }
-
+	double mat[]={1,0,0,   0,1,0,   0,5,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyDown() {
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].y -= STEP;
-    }
-
+    
+	double mat[]={1,0,0,   0,1,0,   0,-5,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyLeft() {
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].x -= STEP;
-    }
-
+    double mat[]={1,0,0,   0,1,0,   -5,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyRight() {
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].x += STEP;
-    }
-
+    double mat[]={1,0,0,   0,1,0,   5,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyLr() {
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].x = - ( this->p[i].x );
-    }
-
+    double mat[]={-1,0,0,   0,1,0,   0,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyUd() {
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].y = - ( this->p[i].y );
-    }
-
+    double mat[]={1,0,0,   0,-1,0,   0,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 
 void CHaoYuView::OnHyClr() {
+	double mat[]={1,0,0,   1,1,0,   0,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyCud() {
+	double mat[]={1,1,0,   0,1,0,   0,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 
 void CHaoYuView::OnHyScaleDown() {
-    if ( this->scale - 1 == 1 ) {
-        return;
-    }
-
-    this->scale--;
-
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].x = ( this->p[i].x ) >> 1;
-        this->p[i].y = ( this->p[i].y ) >> 1;
-    }
-
+    double mat[]={0.5,0,0,   0,0.5,0,   0,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 
 void CHaoYuView::OnHyScaleUp() {
-    if ( this->scale + 1 == 5 ) {
-        return;
-    }
-
-    this->scale++;
-
-    for ( int i = 0; i < UPLIMIT; i++ ) {
-        this->p[i].x = ( this->p[i].x ) << 1;
-        this->p[i].y = ( this->p[i].y ) << 1;
-    }
-
+    double mat[]={2,0,0,   0,2,0,   0,0,0};
+	Change(mat,3,3);
     reDraw();
 }
 

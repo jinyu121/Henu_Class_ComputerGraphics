@@ -41,6 +41,7 @@ public:
     virtual ~CHaoYuView();
     void ready ( CDC* pDC );
 	void reDraw ();
+	void Change(double* inMat,int mx,int my);
 	CPoint p[UPLIMIT];
 	int scale;
 #ifdef _DEBUG
