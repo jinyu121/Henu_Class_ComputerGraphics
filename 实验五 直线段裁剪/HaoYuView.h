@@ -15,7 +15,7 @@ class CHaoYuView : public CView
 protected: // create from serialization only
 	CHaoYuView();
 	CPoint HY_STA,HY_FIN;
-	int HY_BOX_L,HY_BOX_R,HY_BOX_U,HY_BOX_D;
+	int HY_X_L,HY_X_R,HY_Y_U,HY_Y_D;
 	DECLARE_DYNCREATE(CHaoYuView)
 
 // Attributes
@@ -52,7 +52,7 @@ protected:
 	//{{AFX_MSG(CHaoYuView)
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

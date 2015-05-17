@@ -31,6 +31,8 @@ BEGIN_MESSAGE_MAP ( CHaoYuView, CView )
     ON_COMMAND ( ID_HY_RIGHT, OnHyRight )
     ON_COMMAND ( ID_HY_SCALE_DOWN, OnHyScaleDown )
     ON_COMMAND ( ID_HY_SCALE_UP, OnHyScaleUp )
+	ON_COMMAND ( ID_HY_ROTATE_A, OnHyRotateA )
+	ON_COMMAND ( ID_HY_ROTATE_B, OnHyRotateB )
     ON_COMMAND ( ID_HY_UD, OnHyUd )
     ON_COMMAND ( ID_HY_UP, OnHyUp )
     //}}AFX_MSG_MAP
@@ -163,8 +165,8 @@ void CHaoYuView::Change(double* inMat,int mx,int my){
 				}
 			}
 		}
-		this->p[l].x=int(aft[0][0]);
-		this->p[l].y=int(aft[0][1]);
+		this->p[l].x=int(aft[0][0]+0.5);
+		this->p[l].y=int(aft[0][1]+0.5);
     }
 }
 
@@ -225,11 +227,37 @@ void CHaoYuView::OnHyScaleDown() {
     reDraw();
 }
 
+void CHaoYuView::OnHyRotateA() {
+	int x,y;
+	x=(this->p[0].x+this->p[2].x)>>1;
+	y=(this->p[0].y+this->p[2].y)>>1;
+	double mat0[]={1,0,0,	0,1,0,	-x,-y,0};
+	Change(mat0,3,3);
+    double mat[]={cos(30),sin(30),0,   -sin(30),cos(30),0,   0,0,0};
+	Change(mat,3,3);
+	double mat2[]={1,0,0,	0,1,0,	x,y,0};
+	Change(mat2,3,3);
+    reDraw();
+}
+
+
+void CHaoYuView::OnHyRotateB() {
+    int x,y;
+	x=(this->p[0].x+this->p[2].x)>>1;
+	y=(this->p[0].y+this->p[2].y)>>1;
+	double mat0[]={1,0,0,	0,1,0,	-x,-y,0};
+	Change(mat0,3,3);
+    double mat[]={cos(-30),sin(-30),0,   -sin(-30),cos(-30),0,   0,0,0};
+	Change(mat,3,3);
+	double mat2[]={1,0,0,	0,1,0,	x,y,0};
+	Change(mat2,3,3);
+    reDraw();
+}
+
+
 void CHaoYuView::OnHyScaleUp() {
     double mat[]={2,0,0,   0,2,0,   0,0,0};
 	Change(mat,3,3);
     reDraw();
 }
-
-
 

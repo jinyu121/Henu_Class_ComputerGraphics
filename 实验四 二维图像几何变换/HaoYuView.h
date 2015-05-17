@@ -64,6 +64,8 @@ protected:
 	afx_msg void OnHyScaleUp();
 	afx_msg void OnHyUd();
 	afx_msg void OnHyUp();
+	afx_msg void OnHyRotateA();
+	afx_msg void OnHyRotateB();
 	//}}AFX_MSG
     DECLARE_MESSAGE_MAP()
 };

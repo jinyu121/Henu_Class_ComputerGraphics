@@ -117,5 +117,7 @@ Command7=ID_HY_CLR
 Command8=ID_HY_CUD
 Command9=ID_HY_SCALE_UP
 Command10=ID_HY_SCALE_DOWN
-CommandCount=10
+Command11=ID_HY_ROTATE_A
+Command12=ID_HY_ROTATE_B
+CommandCount=12
 

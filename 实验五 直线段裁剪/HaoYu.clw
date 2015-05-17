@@ -110,10 +110,10 @@ Class=?
 Command1=ID_FILE_NEW
 Command2=ID_FILE_OPEN
 Command3=ID_FILE_SAVE
-Command4=ID_EDIT_CUT
-Command5=ID_EDIT_COPY
-Command6=ID_EDIT_PASTE
-Command7=ID_FILE_PRINT
+Command4=ID_EDIT_COPY
+Command5=ID_EDIT_CUT
+Command6=ID_FILE_PRINT
+Command7=ID_EDIT_PASTE
 Command8=ID_APP_ABOUT
 CommandCount=8
 
